@@ -1,6 +1,6 @@
 # NitrAuto
 
-NitrAuto is a basic task scheduler designed for Nitrado hosted ARK Survival Ascended servers. At the time of writing this, Nitrado's dashboard is able to schedule server restarts, but it only gives online players a 5 second warning and has no option to force save the game or destroy wild dinos, resulting in short roll backs and frustraited players.
+NitrAuto is a basic task scheduler designed for Nitrado hosted ARK Survival Ascended servers. At the time of writing this, Nitrado's dashboard is able to schedule server restarts, but it only gives online players a 5 second warning and has no option to force save the game or destroy wild dinos, resulting in short roll backs and frustrated players.
 
 # Features
 - Scheduled server restarts (Nitrado servers only)
@@ -39,7 +39,7 @@ NitrAuto is a basic task scheduler designed for Nitrado hosted ARK Survival Asce
     - Dynamic config file path E.g. "dynamicconfig.ini"
 10. Upload the source files to your web server's root folder (You can use sub folders but will need to adjust the include path for the config file)
 11. `NitrAutoConfig.php` should be placed outside of your web root if possible. It's default include path is one directory above the web root (I.e. "../NitrAutoConfig.php")
-12. Configure a cron job (or Scheduled Task on Windows servers) to run the `nitrauto.cron.php` file every minute. How you do this will depend on your web host so unfortunately I can't provide instructions but there is lots of information on the Internet. The time string needed for the cron job to run every minute is `* * * * *`. Alternatively, if your server doesn't allow 1 minute intervals, you can use a third party server such as [cron-job.org](https://cron-job.org)
+12. Configure a cron job (or Scheduled Task on Windows servers) to run the `nitrauto.cron.php` file every minute. How you do this will depend on your web host so unfortunately I can't provide instructions but there is lots of information on the Internet. The time string needed for the cron job to run every minute is `* * * * *`. Alternatively, if your server doesn't allow 1 minute intervals, you can use a third party service such as [cron-job.org](https://cron-job.org)
 
 # Scheduled Server Rates Configuration
 1. Create a dynamic config file with the name and path you configured in `NitrAutoConfig.php`
@@ -68,7 +68,7 @@ CustomDynamicConfigUrl="http://YourWebServer.com/dynamicconfig.ini"
 1. Open phpMyAdmin and select your database
 2. Check the `servers` table contains the relevant information for your ASA servers. This should be fairly self explanatory.
 3. Optionally set up some dynamic server rates in the `dynamicconfigs` table
-    a. Insert a record which contains your default rates in the `Settings` coulmn (just copy the content of the `dynamicconfig.ini` file you created in the steps above)
+    a. Insert a record which contains your default rates in the `Settings` column (just copy the content of the `dynamicconfig.ini` file you created in the steps above)
     b. Insert one or more additional records and modify the rates ready for your events/weekend rates etc.
 4. Set up one or more scheduled tasks in the `scheduledtasks` table
     - The columns are as follows:
@@ -77,7 +77,7 @@ CustomDynamicConfigUrl="http://YourWebServer.com/dynamicconfig.ini"
         - **ServerID** = This needs to be the `ID` of a server in the `servers` table. This is the server this schedule will run on.
         - **Hour** = Hour of the day that the task will run (0 to 23) E.g. 4PM will be 16
         - **Minute** = Minute of the hour that the task will run E.g. If Hour = 16 and Minute = 30, the task will run at 4:30 PM
-        - **DaysOfWeek** = This determins which days of the week the task will run. This field contains a bitmask which should be entered as below:
+        - **DaysOfWeek** = This determines which days of the week the task will run. This field contains a bitmask which should be entered as below:
             ```
             0 Sun Sat Fri Thu Wed Tue Mon
             0  1   1   1   1   1   1   1  = Task runs every day (Entered as: 01111111)

@@ -94,13 +94,6 @@ class Rcon
     public function SendReceive(RconPacket $packet) : ?RconPacket
     {
         //TODO: Validate $packet
-        //if (is_null($packet))
-
-        // echo "Sending Packet:<br />";
-        // echo $packet . "<br />";
-        // echo "Size: " . $packet->GetContentSize() . "<br />";
-        // var_dump($packet);
-        // echo "<br />";
 
         if (is_null($this->socket)) return null;
 
@@ -121,13 +114,11 @@ class Rcon
                 {
                     $data = fread($this->socket, $size);
                     $response = unpack('V1id/V1type/a*body', $data);
-                    //var_dump($response);
                     $responsePacket = new RconPacket($response['type'], $response['body'], $response['id']);
                 }
             } while ((empty($response) || $response['id'] != $packet->Id) && $i++ < 3);
 
-            // echo "Response:";
-            // var_dump((!empty($responsePacket) ? $responsePacket : null));
+            // echo "Response:" . var_dump((!empty($responsePacket) ? $responsePacket : null));
             return (!empty($responsePacket) ? $responsePacket : null);
 
         } else

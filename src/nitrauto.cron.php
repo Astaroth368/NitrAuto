@@ -15,7 +15,7 @@ if ($sql->Connect())
     $tasks = $sql->GetScheduledTasks();
     foreach ($tasks as $task)
     {
-        //If the scheduled hour has already passed, check the following say
+        //If the scheduled hour has already passed, check the following day
         //E.g. If the current time is 23:30 there could be a task scheduled at 00:00 tomorrow (I.e. in 30 minutes)
         if (date("H") > $task['Hour'])
         {
@@ -33,7 +33,7 @@ if ($sql->Connect())
             {
                 $alertTime = $taskTime - ($mins * 60); //Calculate the time X minutes before task time
                 $curTime = strtotime(date("Y-m-d H:i:00")); //Remove any seconds from the current time
-    //echo "Alert at " . date("Y-m-d H:i:s", $alertTime) . "<br />";
+    
                 if ($alertTime == $curTime) //If an alert should be sent now
                 {
                     $logWriter->LogMessage("Alert is due now");

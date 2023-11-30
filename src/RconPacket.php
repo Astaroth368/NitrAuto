@@ -8,8 +8,6 @@ class RconPacket
     public $Id;
     public int $Type;
     public $Body;
-    //public $Packet;
-    //public $Size;
 
     public function GetContentSize()
     {
