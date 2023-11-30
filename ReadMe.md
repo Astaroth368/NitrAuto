@@ -93,7 +93,7 @@ CustomDynamicConfigUrl="http://YourWebServer.com/dynamicconfig.ini"
                         - SERVERCHAT to send the content of the `Message` field using the ServerChat console command
                         - BROADCAST to send the content of the `Message` field using the Broadcast console command (NOTE: There is a bug in ASA which is preventing this from working with RCON at the moment)
         - **MessageAtMinute** = This is a comma separated list of the number of minutes before the scheduled task time that messages will be sent E.g. If `Hour` = 16 and `Minute` = 30, setting this to 0 would send a message at 4:30 PM and setting it to 15 would send a message at 4:15 PM. Setting this to 0,5,15,30 would send 4 messages at 4:00 PM, 4:15 PM, 4:25 PM and 4:30 PM (*Subject to cron job timings, see below)
-        - **Message** = The message you want to send via the SeverChat or Broadcast console command. You can use \n for a new line.
+        - **Message** = The message you want to send via the SeverChat or Broadcast console command. You can use \n for a new line and `%remaining%` to say how long is left before the task will run E.g. `%remaining%` will be replaced with "in 5 minutes", "in 1 minute" or "NOW" etc. Remaining time will be calculated automatically.
 
 > [!IMPORTANT]
 > If you don't have your cron job (Scheduled Task in Windows) configured to run every minute, you must make sure your scheduled times are set at a time when the cron job will run.
