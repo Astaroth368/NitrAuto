@@ -8,5 +8,7 @@ class NitrAutoConfig
 	public const NitrAPIToken = "Your_Nitrado_Long_Life_token";
 	public const RCONPassword = "Your_RCON_Password";
 	public const DynamicConfigFile = "dynamicconfig.ini";
+    public const CRONIntervalSeconds = 60; //How often your cron job runs in seconds
+    public const RCONTimeout = 10; //Seconds
 }
 ?>

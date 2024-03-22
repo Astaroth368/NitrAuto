@@ -15,9 +15,14 @@ if ($sql->Connect())
     $tasks = $sql->GetScheduledTasks();
     foreach ($tasks as $task)
     {
+        //If this is a one off task, we can ignore the Hour and Minute columns
+        if ($task['OneOffTime'] !== null)
+        {
+            $taskTime = strtotime($task['OneOffTime']);
+        }
         //If the scheduled hour has already passed, check the following day
         //E.g. If the current time is 23:30 there could be a task scheduled at 00:00 tomorrow (I.e. in 30 minutes)
-        if (date("H") > $task['Hour'])
+        else if (date("H") > $task['Hour'])
         {
             $taskTime = strtotime(date("Y-m-") . date("d", time() + 24 * 60 * 60) . $task['Hour'] . ":" . $task['Minute'] . ":00");
         } else
@@ -27,14 +32,18 @@ if ($sql->Connect())
 
         //Check if the task is scheduled to run on the day in $taskTime
         //Bit field format: 0 Sun Sat Fri Thur Wed Tue Mon
-        if ($task['DaysOfWeek'] & (1 << (int)date("N", $taskTime) - 1))
+        if ($task['DaysOfWeek'] & (1 << (int)date("N", $taskTime) - 1)
+        || ($task['OneOffTime'] !== null && $taskTime >= time() && $taskTime <= time() + 24 * 60 * 60))
         {
             foreach (explode(",", $task['MessageAtMinute']) as $mins)
             {
                 $alertTime = $taskTime - ($mins * 60); //Calculate the time X minutes before task time
                 $curTime = strtotime(date("Y-m-d H:i:00")); //Remove any seconds from the current time
     
-                if ($alertTime == $curTime) //If an alert should be sent now
+                //If an alert should be sent now
+                if ($alertTime == $curTime
+                || ($curTime > $alertTime - (NitrAutoConfig::CRONIntervalSeconds / 2)
+                && $curTime < $alertTime + (NitrAutoConfig::CRONIntervalSeconds / 2)))
                 {
                     $logWriter->LogMessage("Alert is due now");
                     echo "Alert is due now<br />";
@@ -150,7 +159,6 @@ if ($sql->Connect())
                         }
                         
                     }
-                    
                 }
                 
             }

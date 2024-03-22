@@ -25,7 +25,7 @@ class RconPacket
     public function __toString(): string
     {
         $packet = pack('V2a*', $this->Id, $this->Type, $this->Body);
-        $packet = $packet . "\0\0"; //Null string terminators
+        $packet = $packet . "\x00\x00"; //Null string terminators
         $packet = pack('V', strlen($packet)) . $packet; //Prepend with size of packet (exclusing the size byte itself)
         return $packet;
     }

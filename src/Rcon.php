@@ -1,4 +1,5 @@
 <?php
+include_once('../NitrAutoConfig.php');
 include_once('RconPacket.php');
 
 //TODO: Better error handling. Return error from constructor and handle in main app.
@@ -12,7 +13,6 @@ class Rcon
     private $port;
     private $password;
     private $socket;
-    private $timeout = 300; //TODO: Is this a good timeout?
     private $authenticated = false;
 
     public function __construct($host, $port, $password)
@@ -34,7 +34,7 @@ class Rcon
         echo "Connecting<br />";
         $this->Disconnect();
 
-        $this->socket = fsockopen($this->host, $this->port, $errno, $errstr, $this->timeout);
+        $this->socket = fsockopen($this->host, $this->port, $errno, $errstr, NitrAutoConfig::RCONTimeout);
 
         if ($this->socket === false)
         {
@@ -44,7 +44,7 @@ class Rcon
 
         echo "Socket created<br />";
 
-        stream_set_timeout($this->socket, 3, 0);
+        stream_set_timeout($this->socket, NitrAutoConfig::RCONTimeout, 0);
 
         return $this->Authenticate();
     }
@@ -104,7 +104,7 @@ class Rcon
             do
             {
                 echo "Reading Response<br />";
-                usleep(50);
+                //usleep(50); //Testing
                 //Read size of packet being received
                 $sizeData = fread($this->socket, 4);
                 (strlen($sizeData) > 0 ? $size = unpack('V1size', $sizeData)['size'] : $size = 0);

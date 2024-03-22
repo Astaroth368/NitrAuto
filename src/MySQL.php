@@ -30,7 +30,7 @@ class MySQLServer
 
     public function GetScheduledTasks()
     {
-        $query = "SELECT * FROM scheduledtasks";
+        $query = "SELECT * FROM scheduledtasks WHERE Enabled = 1";
         return $this->sqlServer->Query($query);
     }
 
