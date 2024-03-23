@@ -1,4 +1,5 @@
 <?php
+include_once("../NitrAutoConfig.php");
 
 class LogWriter
 {
@@ -23,6 +24,7 @@ class LogWriter
     public function LogMessage($message)
     {
         fwrite($this->logFile, "[" . date("Y-m-d H:i:s") . "] $message\n"); 
+        echo (NitrAutoConfig::DEBUG ? $message . "<br />" : "");
     }
     
     private function CloseLogFile()

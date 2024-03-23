@@ -1,6 +1,8 @@
 <?php
 class NitrAutoConfig
 {
+	public const DEBUG = false;
+
 	public const Host = "localhost"; //localhost can be used if the MySQL server is running on the same machine as your web server. Otherwise enter the fomain name or IP addres of your MySQL server
 	public const Username = "Your_MySQL_Username";
 	public const Password = "Your_MySQL_Password";

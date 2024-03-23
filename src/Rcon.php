@@ -2,9 +2,8 @@
 include_once('../NitrAutoConfig.php');
 include_once('RconPacket.php');
 
-//TODO: Better error handling. Return error from constructor and handle in main app.
 if (!extension_loaded('sockets')) {
-    die('The sockets extension is not loaded.');
+    throw new Exception("The sockets extension is not loaded");
 }
 
 class Rcon
@@ -123,7 +122,7 @@ class Rcon
 
         } else
         {
-            echo "Failed to send packet " . socket_last_error($this->socket) . "<br />";
+            throw new Exception("Failed to send packet: " . socket_last_error($this->socket));
         }
 
         return null;
