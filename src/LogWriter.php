@@ -26,6 +26,15 @@ class LogWriter
         fwrite($this->logFile, "[" . date("Y-m-d H:i:s") . "] $message\n"); 
         echo (NitrAutoConfig::DEBUG ? $message . "<br />" : "");
     }
+
+    public function WriteDebug($message)
+    {
+        if (NitrAutoConfig::DEBUG)
+        {
+            fwrite($this->logFile, "[" . date("Y-m-d H:i:s") . "] DEBUG: $message\n"); 
+            echo (NitrAutoConfig::DEBUG ? "DEBUG: " . $message . "<br />" : "");
+        }
+    }
     
     private function CloseLogFile()
     {

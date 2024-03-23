@@ -16,6 +16,14 @@ try
         $tasks = $sql->GetScheduledTasks();
         foreach ($tasks as $task)
         {
+            $logWriter->WriteDebug("Processing task " . $task['ID']);
+
+            //If this task is disabled
+            if ($task['Enabled'] == 0)
+            {
+                continue; //Skip this task
+            }
+
             //If this is a one off task, we can ignore the Hour and Minute columns
             if ($task['OneOffTime'] !== null)
             {
@@ -31,16 +39,17 @@ try
                 $taskTime = strtotime(date("Y-m-d ") . $task['Hour'] . ":" . $task['Minute'] . ":00");
             }
 
+            $curTime = strtotime(date("Y-m-d H:i:00")); //Remove any seconds from the current time
+
             //Check if the task is scheduled to run on the day in $taskTime
             //Bit field format: 0 Sun Sat Fri Thur Wed Tue Mon
             if ($task['DaysOfWeek'] & (1 << (int)date("N", $taskTime) - 1)
-            || ($task['OneOffTime'] !== null && $taskTime >= time() && $taskTime <= time() + 24 * 60 * 60))
+            || ($task['OneOffTime'] !== null && $taskTime >= $curTime && $taskTime <= $curTime + 24 * 60 * 60))
             {
                 foreach (explode(",", $task['MessageAtMinute']) as $mins)
                 {
                     $alertTime = $taskTime - ($mins * 60); //Calculate the time X minutes before task time
-                    $curTime = strtotime(date("Y-m-d H:i:00")); //Remove any seconds from the current time
-        
+
                     //If an alert should be sent now
                     if ($alertTime == $curTime
                     || ($curTime > $alertTime - (NitrAutoConfig::CRONIntervalSeconds / 2)
@@ -158,7 +167,7 @@ try
                     
                 }
             }
-            echo (NitrAutoConfig::DEBUG ? "Task Scheduled at " . date("H:i d-m-Y", $taskTime) ."<br />" : "");
+            $logWriter->WriteDebug("Task Scheduled at " . date("H:i d-m-Y", $taskTime));
         }
     }
 } catch (Exception $e) {

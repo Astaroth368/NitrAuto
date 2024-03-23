@@ -10,11 +10,8 @@ NitrAuto is a basic task scheduler designed for Nitrado hosted ARK Survival Asce
 - Schedule other commands which work with RCON
 - Schedule server rate changes using ARK's `CustomDynamicConfigUrl` setting
 
-> [!NOTE]
-> There is currently an issue with RCON connectivity in ARK Survival Ascended which could impact the reliability of this tool. Unfortunately we need to wait for WildCard to resolve this issue, but as this tool only makes a brief connection, I haven't seen any issues yet on my server.
-
 # Requirements
-- Web Server (paid or free)
+- Web Server (paid, free or self hosted)
 - PHP 8
 - MySQL Database
 - Access to cron jobs (or Task Scheduler for Windows web servers)
@@ -74,7 +71,9 @@ CustomDynamicConfigUrl="http://YourWebServer.com/dynamicconfig.ini"
     - The columns are as follows:
         - **ID** = Auto increments, you can ignore this column
         - **Created** = Filled automatically, you can ignore this column
+        - **Enabled** = Enables or disables this task
         - **ServerID** = This needs to be the `ID` of a server in the `servers` table. This is the server this schedule will run on.
+        - **OneOffTime** = Performs the task at the specified time stamp. Useful for changing server rates for events
         - **Hour** = Hour of the day that the task will run (0 to 23) E.g. 4PM will be 16
         - **Minute** = Minute of the hour that the task will run E.g. If Hour = 16 and Minute = 30, the task will run at 4:30 PM
         - **DaysOfWeek** = This determines which days of the week the task will run. This field contains a bitmask which should be entered as below:
@@ -96,5 +95,5 @@ CustomDynamicConfigUrl="http://YourWebServer.com/dynamicconfig.ini"
         - **Message** = The message you want to send via the SeverChat or Broadcast console command. You can use \n for a new line and `%remaining%` to say how long is left before the task will run E.g. `%remaining%` will be replaced with "in 5 minutes", "in 1 minute" or "NOW" etc. Remaining time will be calculated automatically.
 
 > [!IMPORTANT]
-> If you don't have your cron job (Scheduled Task in Windows) configured to run every minute, you must make sure your scheduled times are set at a time when the cron job will run.
-> E.g. If you set a schedule to restart your server at 4:29 PM but your cron job runs at 4:25 and 4:30 PM, your task will not run and your server will not restart.
+> If you don't have your cron job (Scheduled Task in Windows) configured to run every minute, try to make sure your scheduled times are set at a time when the cron job will run. If configured correctly the script will try to check if the job should have run between cron job intervals, but to be sure it's best to set your schedules correctly.
+> E.g. If you set a schedule to restart your server at 4:29 AM but your cron job runs at 4:25 and 4:30 AM, your task may not run in which case your server will not restart. If the cron interval is set correctly in the config file, your server should restart but it will happen at 4:30 AM instead of the 4:29 AM.
